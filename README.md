@@ -10,8 +10,8 @@ I hope you enjoy playing with it :)
 ### Run 
 
 ```
-$ git clone https://github.com/LucasDivino/Sorting-algorithms-visualizer.git
-$ cd ./Sorting-algorithms-visualizer
+$ git clone https://github.com/LucasDivino/pathfinding-algorithms-visualizer
+$ cd ./pathfinding-algorithms-visualizer
 $ npm install
 $ npm start
 ```
