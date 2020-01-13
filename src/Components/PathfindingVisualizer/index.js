@@ -7,7 +7,10 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import { dijkstra, getShortestPath } from '../../algorithms/dijkstra';
+import { dijkstra } from '../../algorithms/dijkstra';
+import { BFS } from '../../algorithms/breadthFirst';
+import { DFS } from '../../algorithms/depthFirst';
+import { getShortestPath } from '../../algorithms/utils';
 
 import './styles.css';
 
@@ -140,6 +143,12 @@ export default class PathfindingVisualizer extends Component {
         case 'Dijkstra':
           this.visualizeDijkstra();
           break;
+        case 'BFS':
+          this.visualizeBFS();
+          break;
+        case 'DFS':
+          this.visualizeDFS();
+          break;
         default:
           this.setState({ alertText: 'Choose an algorithm', show: true });
       }
@@ -230,7 +239,7 @@ export default class PathfindingVisualizer extends Component {
     }
   }
 
-  animateDijkstra(visitedNodes, shortestPath) {
+  animate(visitedNodes, shortestPath) {
     for (let i = 0; i <= visitedNodes.length; i++) {
       if (i === visitedNodes.length) {
         setTimeout(() => {
@@ -245,13 +254,41 @@ export default class PathfindingVisualizer extends Component {
     }
   }
 
+  animateDFS(visitedNodes, shortestPath) {
+    for (let i = 0; i < visitedNodes.length; i++) {
+      setTimeout(() => {
+        const node = visitedNodes[i];
+        document.getElementById(`${node.row},${node.col}`).className = 'node node-visited';
+      }, 10 * i);
+    }
+  }
+
+  visualizeBFS() {
+    const { grid } = this.state;
+    const startNode = grid[START_ROW][START_COL];
+    const finishNode = grid[FINISH_ROW][FINISH_COL];
+    const visitedNodes = BFS(grid, startNode);
+    const shortestPath = getShortestPath(finishNode);
+    this.animate(visitedNodes, shortestPath);
+  }
+
+  visualizeDFS() {
+    const { grid } = this.state;
+    const startNode = grid[START_ROW][START_COL];
+    const finishNode = grid[FINISH_ROW][FINISH_COL];
+    const visitedNodes = DFS(grid, startNode);
+    dijkstra(grid, startNode, finishNode);
+    const shortestPath = getShortestPath(finishNode);
+    this.animate(visitedNodes, shortestPath);
+  }
+
   visualizeDijkstra() {
     const { grid } = this.state;
     const startNode = grid[START_ROW][START_COL];
     const finishNode = grid[FINISH_ROW][FINISH_COL];
     const visitedNodes = dijkstra(grid, startNode, finishNode);
     const shortestPath = getShortestPath(finishNode);
-    this.animateDijkstra(visitedNodes, shortestPath);
+    this.animate(visitedNodes, shortestPath);
   }
 
   render() {
@@ -289,9 +326,15 @@ export default class PathfindingVisualizer extends Component {
             <NavDropdown.Item onClick={() => this.handleChangeAlgorithm('Dijkstra')}>
               Dijkstra
             </NavDropdown.Item>
+            <NavDropdown.Item onClick={() => this.handleChangeAlgorithm('BFS')}>
+              BFS
+            </NavDropdown.Item>
+            <NavDropdown.Item onClick={() => this.handleChangeAlgorithm('DFS')}>
+              DFS
+            </NavDropdown.Item>
           </NavDropdown>
           <Button variant="light" onClick={() => this.handleClickVisualize()}>
-            Vizualize!
+            Visualize!
           </Button>
         </Navbar>
         <div className="spacingGrid">

@@ -1,10 +1,4 @@
-function setDistanceInfinity(grid) {
-  for (const row of grid) {
-    for (const node of row) {
-      node.distance = Infinity;
-    }
-  }
-}
+import { setNode } from './utils';
 
 function getUnvisitedNeighbors(node, grid) {
   const neighbors = [];
@@ -29,7 +23,7 @@ function sortNodesByDistance(unvisitedNodes) {
 }
 
 export function dijkstra(grid, startNode, finishNode) {
-  setDistanceInfinity(grid);
+  setNode(grid);
   const visitedNodes = [];
   startNode.distance = 0;
   const unvisitedNodes = getAllNodes(grid);
@@ -55,14 +49,4 @@ function getAllNodes(grid) {
     }
   }
   return nodes;
-}
-
-export function getShortestPath(finishNode) {
-  const shortestPath = [];
-  let currentNode = finishNode;
-  while (currentNode !== undefined) {
-    shortestPath.unshift(currentNode);
-    currentNode = currentNode.previousNode;
-  }
-  return shortestPath;
 }
