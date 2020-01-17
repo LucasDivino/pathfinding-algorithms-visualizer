@@ -17,7 +17,7 @@ import './styles.css';
 
 let START_ROW = 3;
 let START_COL = 3;
-let FINISH_ROW = 21n;
+let FINISH_ROW = 21;
 let FINISH_COL = 3;
 
 let HAS_START = true;
