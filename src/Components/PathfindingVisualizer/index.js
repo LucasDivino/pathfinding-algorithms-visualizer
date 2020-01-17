@@ -11,13 +11,14 @@ import { dijkstra } from '../../algorithms/dijkstra';
 import { BFS } from '../../algorithms/breadthFirst';
 import { DFS } from '../../algorithms/depthFirst';
 import { getShortestPath } from '../../algorithms/utils';
+import { mazeGenerator } from '../../algorithms/mazeGenerator';
 
 import './styles.css';
 
-let START_ROW = 0;
-let START_COL = 0;
-let FINISH_ROW = 24;
-let FINISH_COL = 0;
+let START_ROW = 3;
+let START_COL = 3;
+let FINISH_ROW = 21n;
+let FINISH_COL = 3;
 
 let HAS_START = true;
 let HAS_FINISH = true;
@@ -254,15 +255,6 @@ export default class PathfindingVisualizer extends Component {
     }
   }
 
-  animateDFS(visitedNodes, shortestPath) {
-    for (let i = 0; i < visitedNodes.length; i++) {
-      setTimeout(() => {
-        const node = visitedNodes[i];
-        document.getElementById(`${node.row},${node.col}`).className = 'node node-visited';
-      }, 10 * i);
-    }
-  }
-
   visualizeBFS() {
     const { grid } = this.state;
     const startNode = grid[START_ROW][START_COL];
@@ -289,6 +281,33 @@ export default class PathfindingVisualizer extends Component {
     const visitedNodes = dijkstra(grid, startNode, finishNode);
     const shortestPath = getShortestPath(finishNode);
     this.animate(visitedNodes, shortestPath);
+  }
+
+  generateMaze() {
+    const { grid } = this.state;
+    let row = START_ROW;
+    let col = START_COL;
+    if (col < grid[0].length - 1) {
+      if (col % 2 === 0) {
+        col += 1;
+      }
+    } else {
+      if (col % 2 === 0) {
+        col -= 1;
+      }
+    }
+    if (row < grid.length - 1) {
+      if (row % 2 === 0) {
+        row += 1;
+      }
+    } else {
+      if (row % 2 === 0) {
+        row -= 1;
+      }
+    }
+    const startNode = grid[row][col];
+    const newGrid = mazeGenerator(grid, startNode);
+    this.setState({ grid: newGrid });
   }
 
   render() {
@@ -333,8 +352,15 @@ export default class PathfindingVisualizer extends Component {
               DFS
             </NavDropdown.Item>
           </NavDropdown>
-          <Button variant="light" onClick={() => this.handleClickVisualize()}>
+          <Button
+            variant="light"
+            className="rightSpace"
+            onClick={() => this.handleClickVisualize()}
+          >
             Visualize!
+          </Button>
+          <Button variant="light" onClick={() => this.generateMaze()}>
+            Generate Maze
           </Button>
         </Navbar>
         <div className="spacingGrid">
