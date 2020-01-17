@@ -38,14 +38,18 @@ function setWalls(grid) {
   for (let i = 0; i < grid.length; i += 2) {
     for (let j = 0; j < grid[0].length; j++) {
       if (grid[i][j]) {
-        grid[i][j].isWall = true;
+        if (!grid[i][j].isStart && !grid[i][j].isFisish) {
+          grid[i][j].isWall = true;
+        }
       }
     }
   }
   for (let i = 0; i < grid[0].length; i += 2) {
     for (let j = 0; j < grid.length; j++) {
       if (grid[j][i]) {
-        grid[j][i].isWall = true;
+        if (!grid[j][i].isStart && !grid[j][i].isFisish) {
+          grid[j][i].isWall = true;
+        }
       }
     }
   }

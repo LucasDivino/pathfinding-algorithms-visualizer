@@ -34,7 +34,7 @@ const createNode = (col, row) => {
 
 const InitialGrid = () => {
   const grid = [];
-  for (let row = 0; row < 25; row++) {
+  for (let row = 0; row < 31; row++) {
     const currentRow = [];
     for (let col = 0; col < Math.floor((screen.width - 25) / 26); col++) {
       currentRow.push(createNode(col, row));
