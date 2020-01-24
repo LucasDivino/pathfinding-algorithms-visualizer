@@ -129,7 +129,8 @@ export default class PathfindingVisualizer extends Component {
       grid: [],
       isPressed: false,
       show: false,
-      alertText: ''
+      alertText: '',
+      isLoading: false
     };
   }
 
@@ -236,11 +237,15 @@ export default class PathfindingVisualizer extends Component {
       setTimeout(() => {
         const node = shortestPath[i];
         document.getElementById(`${node.row},${node.col}`).className = 'node node-shortest-path';
+        if (i === shortestPath.length - 1) {
+          this.setState({ isLoading: false });
+        }
       }, 30 * i);
     }
   }
 
   animate(visitedNodes, shortestPath) {
+    this.setState({ isLoading: true });
     for (let i = 0; i <= visitedNodes.length; i++) {
       if (i === visitedNodes.length) {
         setTimeout(() => {
@@ -328,6 +333,7 @@ export default class PathfindingVisualizer extends Component {
             variant="outline-light"
             className="rightSpace"
             onClick={() => this.handleClickClearBoard()}
+            disabled={this.state.isLoading}
           >
             Clear Board
           </Button>
@@ -335,6 +341,7 @@ export default class PathfindingVisualizer extends Component {
             variant="outline-light"
             className="rightSpace"
             onClick={() => this.handleClickClearPath()}
+            disabled={this.state.isLoading}
           >
             Clear Path
           </Button>
@@ -353,13 +360,18 @@ export default class PathfindingVisualizer extends Component {
             </NavDropdown.Item>
           </NavDropdown>
           <Button
+            disabled={this.state.isLoading}
             variant="light"
             className="rightSpace"
             onClick={() => this.handleClickVisualize()}
           >
             Visualize!
           </Button>
-          <Button variant="light" onClick={() => this.generateMaze()}>
+          <Button
+            disabled={this.state.isLoading}
+            variant="light"
+            onClick={() => this.generateMaze()}
+          >
             Generate Maze
           </Button>
         </Navbar>
